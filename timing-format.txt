@@ -1,0 +1,3 @@
+time_namelookup: %{time_namelookup}\n
+time_appconnect: %{time_appconnect}\n
+time_starttransfer: %{time_starttransfer}\n
