@@ -1,5 +1,6 @@
 import os
 import re
+import csv
 
 # Liste des URL à traiter
 liste_urls = [
@@ -12,7 +13,7 @@ liste_urls = [
 timing_format_file = "timing-format.txt"
 
 # Nombre de fois que chaque URL doit être testée
-nombre_tests = 2
+nombre_tests = 10
 
 # Dictionnaire pour stocker les temps pour chaque URL
 temps_par_url = {url: {"time_namelookup": [], "time_appconnect": [], "time_starttransfer": [], "speed_download": []} for url in liste_urls}
@@ -42,3 +43,23 @@ for url, timings in temps_par_url.items():
         moyenne = sum(values) / len(timings.items())
         print(f"{key}: {moyenne:.6f}")
     print()
+
+# Ouverture (ou création) du fichier CSV pour l'écriture
+with open('moyennes_par_url.csv', 'w', newline='') as file:
+    # Création de l'objet écrivain CSV
+    writer = csv.writer(file, delimiter=';')
+
+    # Écriture de l'en-tête basé sur les clés du premier élément de temps_par_url
+    headers = ['URL'] + list(temps_par_url[next(iter(temps_par_url))].keys())
+    writer.writerow(headers)
+
+    # Calcul des moyennes pour chaque URL et écriture dans le fichier CSV
+    for url, timings in temps_par_url.items():
+        row = [url]
+        for key, values in timings.items():
+            moyenne = sum(values) / len(values)
+            row.append(moyenne)
+        writer.writerow(row)
+
+print("Données écrites avec succès dans 'moyennes_par_url.csv'")
+
