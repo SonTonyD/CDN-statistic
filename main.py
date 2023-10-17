@@ -27,7 +27,8 @@ for url in liste_urls:
         try:
             result = os.popen(commande_curl).read()
             for line in result.split("\n"):
-                match = re.search(r"(time_\w+): (\d+\.\d+)", line)
+                pattern = r"(\w+):\s+(\d+\.\d+|\d+)"
+                match = re.search(pattern, line)
                 if match:
                     key, value = match.groups()
                     temps_par_url[url][key].append(float(value))
